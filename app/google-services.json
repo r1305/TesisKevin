@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "325650304254",
+    "firebase_url": "https://tesiskevin.firebaseio.com",
+    "project_id": "tesiskevin",
+    "storage_bucket": "tesiskevin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:325650304254:android:e1a230e55258c371",
+        "android_client_info": {
+          "package_name": "tesis.ulima.com.tesiskevin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "325650304254-sobllvl0cr8n1tqpdebgis49fc5pm2qu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "tesis.ulima.com.tesiskevin",
+            "certificate_hash": "9ba27504b8b8d9fffe24cfa2520ef8b5f330227c"
+          }
+        },
+        {
+          "client_id": "325650304254-ahmhvhdtgbgbib9ha0gp76nmnjoh4j9d.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "325650304254-ahmhvhdtgbgbib9ha0gp76nmnjoh4j9d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfeK5bKyFRdgN4xB40S6Wiv5hHXbZ2y2c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "325650304254-ahmhvhdtgbgbib9ha0gp76nmnjoh4j9d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
