@@ -1,7 +1,6 @@
 package tesis.ulima.com.tesiskevin;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -69,15 +68,11 @@ public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerAdapter.View
         this.l = l;
     }
 
-    public void setOnClickListener(View.OnClickListener listener){
-        this.listener = listener;
-    }
-
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final JSONObject o=l.get(position);
         holder.name.setText((String)o.get("nombre"));
-        holder.afinidad.setText(String.valueOf(afinidad*100)+"%");
+        holder.afinidad.setText(String.valueOf(afinidad)+"%");
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +89,7 @@ public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerAdapter.View
                 FragmentManager fm = ((HomeActivity)context).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 Fragment fr;
-                fr=VolunteerDetail.newInstance(o.get("id").toString());
+                fr=VolunteerDetail.newInstance(o.get("id").toString(),String.valueOf(afinidad));
                 fragmentTransaction.replace(R.id.flaContenido,fr);
                 fragmentTransaction.commit();
             }
@@ -127,13 +122,6 @@ public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerAdapter.View
     }
 
     public void getVolunteerPreferences(final String volunteer_id,final int position){
-//        final MaterialDialog md=new MaterialDialog.Builder(context)
-//                .content("Obteniendo preferencias")
-//                .progress(true,0)
-//                .cancelable(false)
-//                .backgroundColor(Color.WHITE)
-//                .contentColor(Color.BLACK)
-//                .show();
         RequestQueue queue = Volley.newRequestQueue(context);
         String url ="https://espacioseguro.pe/php_connection/kevin/getPreferences.php?idUsuario="+Integer.valueOf(volunteer_id);
         // Request a string response from the provided URL.
@@ -287,7 +275,6 @@ public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerAdapter.View
 
                                     afinidad=model.calcularAfinidadTotal(adult,volunteer);
                                     VolunteerAdapter.this.notifyItemChanged(position);
-//                                    Toast.makeText(context, String.valueOf(afinidad*100)+"%", Toast.LENGTH_SHORT).show();
                                 }catch (Exception e){
                                     Toast.makeText(context, "Error al calcular afinidad: "+e, Toast.LENGTH_SHORT).show();
                                 }

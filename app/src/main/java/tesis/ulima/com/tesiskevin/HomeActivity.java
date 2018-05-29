@@ -2,6 +2,7 @@ package tesis.ulima.com.tesiskevin;
 
 import android.graphics.Color;
 import android.graphics.ColorSpace;
+import android.opengl.Visibility;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -79,6 +80,15 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.flaContenido,fr);
         fragmentTransaction.commit();
         toolbar.setTitle("Preferencias");
+
+        if(u.getTipo_usuario()==2){
+            navigationView.getMenu().getItem(1).setVisible(false);
+        }
+
+        if(u.getTipo_usuario()==1){
+            navigationView.getMenu().getItem(2).setVisible(false);
+        }
+
     }
 
     @Override
@@ -99,13 +109,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(this, "Voluntarios", Toast.LENGTH_SHORT).show();
             toolbar.setTitle("Lista de Voluntarios");
         }else if(id==R.id.nav_requests){
-//            fr=NotificationFragment.newInstance();
-//            fragmentTransaction.replace(R.id.flaContenido,fr);
-//            fragmentTransaction.commit();
-            Toast.makeText(this, "Solicitudes", Toast.LENGTH_SHORT).show();
+            if(u.getTipo_usuario()==1){
+                fr=AdultRequestFragment.newInstance();
+            }else{
+                fr=VolunteerRequestFragment.newInstance();
+            }
+
+            fragmentTransaction.replace(R.id.flaContenido,fr);
+            fragmentTransaction.commit();
+//            Toast.makeText(this, "Solicitudes", Toast.LENGTH_SHORT).show();
+            toolbar.setTitle("Solicitudes");
 
         }else if(id==R.id.nav_logout) {
             session.logoutUser();
+        }else if(id==R.id.nav_programs){
+            fr=VisitasFragment.newInstance();
+            fragmentTransaction.replace(R.id.flaContenido,fr);
+            fragmentTransaction.commit();
+//            Toast.makeText(this, "Visitas Programadas", Toast.LENGTH_SHORT).show();
+            toolbar.setTitle("Visitas Programadas");
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

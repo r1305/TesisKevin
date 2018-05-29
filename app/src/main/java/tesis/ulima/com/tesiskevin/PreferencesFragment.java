@@ -123,6 +123,8 @@ public class PreferencesFragment extends Fragment {
     User u;
     Button btn_guardar;
 
+    MaterialDialog md;
+
     public PreferencesFragment() {
         // Required empty public constructor
     }
@@ -707,6 +709,13 @@ public class PreferencesFragment extends Fragment {
     }
 
     public void updatePreference(){
+        md=new MaterialDialog.Builder(context)
+                .content("Guardando preferencias")
+                .progress(true,0)
+                .cancelable(false)
+                .backgroundColor(Color.WHITE)
+                .contentColor(Color.BLACK)
+                .show();
         JSONObject json=new JSONObject();
 
         json.put("chk_biodanza",chk_biodanza_val);
@@ -763,10 +772,12 @@ public class PreferencesFragment extends Fragment {
                     @Override
                     public void onResponse(String data) {
                         System.out.println(data);
+                        md.dismiss();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                md.dismiss();
                 System.out.println(error.toString());
                 Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
             }

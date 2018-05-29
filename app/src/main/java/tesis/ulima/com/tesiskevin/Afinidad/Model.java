@@ -193,14 +193,14 @@ public class Model {
         return afinidadEjercicio;
     }
 
-    public long calcularAfinidadTotal(Usuario a,Usuario b){
+    public float calcularAfinidadTotal(Usuario a,Usuario b){
         double afinidadEntretenimiento=this.calcularAfinidadEntretenimiento(a, b);
         double afinidadAprendizaje=this.calcularAfinidadAprendizaje(a, b);
         double afinidadArte=this.calcularAfinidadArte(a, b);
         double afinidadEjercicio=this.calcularAfinidadEjercicio(a, b);
 
-        double afinidad=afinidadEntretenimiento+afinidadAprendizaje+afinidadArte+afinidadEjercicio;
-        long afinidadTotal=Math.round(afinidad);
+        float afinidad=Float.parseFloat(String.valueOf(afinidadEntretenimiento+afinidadAprendizaje+afinidadArte+afinidadEjercicio));
+        float afinidadTotal=afinidad*100;
         return afinidadTotal;
     }
 }

@@ -1,7 +1,6 @@
 package tesis.ulima.com.tesiskevin;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,30 +26,30 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import tesis.ulima.com.tesiskevin.Utils.SessionManager;
 import tesis.ulima.com.tesiskevin.Utils.User;
 
-
-public class VolunteerFragment extends Fragment {
+public class VisitasFragment extends Fragment {
 
     Context context;
     RecyclerView activity;
-    VolunteerAdapter adapter;
+    VisitasAdapter adapter;
     List<JSONObject> l=new ArrayList<>();
-    SessionManager session;
     SwipeRefreshLayout srefresh;
     MaterialDialog md;
     User u;
+    SessionManager session;
 
-    public VolunteerFragment() {
+    public VisitasFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static VolunteerFragment newInstance() {
-        VolunteerFragment fragment = new VolunteerFragment();
+    public static VisitasFragment newInstance() {
+        VisitasFragment fragment = new VisitasFragment();
         return fragment;
     }
 
@@ -58,24 +57,29 @@ public class VolunteerFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=this.getContext();
+        session=new SessionManager(context);
+        HashMap<String,String> user=session.getUserDetails();
+        Gson g=new Gson();
+        u=g.fromJson(user.get(SessionManager.KEY_VALUES),User.class);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_volunteer, container, false);
-        activity=view.findViewById(R.id.recycler_view_volunteer);
+        View view=inflater.inflate(R.layout.fragment_visitas, container, false);
+        activity=view.findViewById(R.id.recycler_view_visitas);
         activity.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new VolunteerAdapter(l);
+        srefresh=view.findViewById(R.id.swipe_visitas);
+        adapter=new VisitasAdapter(l);
 
-        /*srefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        srefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 srefresh.setRefreshing(true);
-                getVolunteers();
+                getVisitas();
             }
-        });*/
+        });
         md=new MaterialDialog.Builder(getContext())
                 .content("Cargando")
                 .progress(true,0)
@@ -83,15 +87,14 @@ public class VolunteerFragment extends Fragment {
                 .backgroundColor(Color.WHITE)
                 .contentColor(Color.BLACK)
                 .show();
-        getVolunteers();
-
+        getVisitas();
         activity.setAdapter(adapter);
         return view;
     }
 
-    public void getVolunteers(){
+    public void getVisitas(){
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url ="https://espacioseguro.pe/php_connection/kevin/getVolunteers.php";
+        String url ="https://espacioseguro.pe/php_connection/kevin/getVisitas.php?volunteer="+u.getId();
         System.out.println(url);
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -106,7 +109,7 @@ public class VolunteerFragment extends Fragment {
                             for(int i=0;i<ja.size();i++){
                                 l.add((JSONObject)ja.get(i));
                             }
-//                            srefresh.setRefreshing(false);
+                            srefresh.setRefreshing(false);
                             adapter.notifyDataSetChanged();
                             md.dismiss();
                         } catch (Exception e) {

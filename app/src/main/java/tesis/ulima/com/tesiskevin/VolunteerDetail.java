@@ -3,6 +3,7 @@ package tesis.ulima.com.tesiskevin;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -39,17 +41,18 @@ import tesis.ulima.com.tesiskevin.Utils.SessionManager;
 import tesis.ulima.com.tesiskevin.Utils.User;
 
 public class VolunteerDetail extends Fragment {
-    private static final String idVolunteer = "";
+    private static final String idVolunteer = "vol";
+    private static final String afinidad_param ="afinidad";
 
     private String volunteer;
-    private long afinidad;
-    private Usuario volunteer_pref,adult;
+    private float afinidad;
     private Button btn_back,btn_agendar;
 
     private TextView vol_name,vol_direction,vol_afinidad;
 
     private User u;
     private SessionManager session;
+    MaterialDialog md;
 
     AlertDialog.Builder alertDialogBuilder;
     AlertDialog alertDialog;
@@ -62,10 +65,11 @@ public class VolunteerDetail extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static VolunteerDetail newInstance(String param1) {
+    public static VolunteerDetail newInstance(String param1,String param2) {
         VolunteerDetail fragment = new VolunteerDetail();
         Bundle args = new Bundle();
         args.putString(idVolunteer, param1);
+        args.putString(afinidad_param, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,6 +79,8 @@ public class VolunteerDetail extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             volunteer = getArguments().getString(idVolunteer);
+            System.out.println(volunteer);
+            afinidad=Float.parseFloat( getArguments().getString(afinidad_param));
         }
         session=new SessionManager(getActivity());
         HashMap<String,String> user=session.getUserDetails();
@@ -144,7 +150,14 @@ public class VolunteerDetail extends Fragment {
                 btn_save_agendar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getActivity(), calendar.getText()+" "+time.getText(), Toast.LENGTH_SHORT).show();
+                        md=new MaterialDialog.Builder(getActivity())
+                                .content("Agendando")
+                                .progress(true,0)
+                                .cancelable(false)
+                                .backgroundColor(Color.WHITE)
+                                .contentColor(Color.BLACK)
+                                .show();
+                        createRequest();
                     }
                 });
             }
@@ -183,8 +196,8 @@ public class VolunteerDetail extends Fragment {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         String params="?volunteer="+volunteer;
         String url = "https://espacioseguro.pe/php_connection/kevin/getVolunteer.php"+params;
-
-        StringRequest postRequest = new StringRequest(Request.Method.GET, url,
+        System.out.println(url);
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()
                 {
                     @Override
@@ -197,15 +210,15 @@ public class VolunteerDetail extends Fragment {
                             for(int i=0;i<ja.size();i++){
                                 JSONObject o=(JSONObject)ja.get(i);
                                 System.out.println(o.get("nombre"));
-                                getVolunteerPreferences(o.get("id").toString());
+                                System.out.println(o.get("id").toString());
                                 vol_name.setText(o.get("nombre").toString());
                                 vol_direction.setText(o.get("direccion").toString());
+                                vol_afinidad.setText(String.valueOf(afinidad)+"%");
                             }
                         } catch (Exception e) {
                             Toast.makeText(getContext(),"Intente luego", Toast.LENGTH_SHORT).show();
                             e.printStackTrace();
                         }
-
                     }
                 },
                 new Response.ErrorListener()
@@ -221,184 +234,30 @@ public class VolunteerDetail extends Fragment {
         queue.add(postRequest);
     }
 
-    public void getVolunteerPreferences(final String volunteer_id){
-//        final MaterialDialog md=new MaterialDialog.Builder(context)
-//                .content("Obteniendo preferencias")
-//                .progress(true,0)
-//                .cancelable(false)
-//                .backgroundColor(Color.WHITE)
-//                .contentColor(Color.BLACK)
-//                .show();
+    public void createRequest(){
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url ="https://espacioseguro.pe/php_connection/kevin/getPreferences.php?idUsuario="+Integer.valueOf(volunteer_id);
+        String params="?idAdulto="+u.getId()+"&idVoluntario="+volunteer+"&fecha="+calendar.getText()+"&hora="+time.getText()+"&afinidad="+afinidad;
+        String url ="https://espacioseguro.pe/php_connection/kevin/createRequest.php"+params;
+        System.out.println(url);
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        System.out.println("voluntario "+volunteer_id);
                         System.out.println(response);
-                        JSONParser jp = new JSONParser();
-                        try {
-                            JSONArray a=(JSONArray)jp.parse(response);
-                            if(a.size()!=0){
-                                JSONObject o=(JSONObject)a.get(0);
-                                volunteer_pref=new Usuario(
-                                        Integer.valueOf(o.get("chk_guitarra").toString()),
-                                        Integer.valueOf(o.get("chk_timbales").toString()),
-                                        Integer.valueOf(o.get("chk_piano").toString()),
-                                        Integer.valueOf(o.get("chk_violin").toString()),
-                                        Integer.valueOf(o.get("chk_saxofon").toString()),
-                                        Integer.valueOf(o.get("chk_trompeta").toString()),
-                                        Integer.valueOf(o.get("chk_bateria").toString()),
-                                        Integer.valueOf(o.get("chk_tejido").toString()),
-                                        Integer.valueOf(o.get("chk_costura").toString()),
-                                        Integer.valueOf(o.get("chk_manualidades").toString()),
-                                        Integer.valueOf(o.get("chk_escultura").toString()),
-                                        Integer.valueOf(o.get("chk_ajedrez").toString()),
-                                        Integer.valueOf(o.get("chk_ludo").toString()),
-                                        Integer.valueOf(o.get("chk_damas").toString()),
-                                        Integer.valueOf(o.get("chk_damas_chinas").toString()),
-                                        Integer.valueOf(o.get("chk_ingles").toString()),
-                                        Integer.valueOf(o.get("chk_aleman").toString()),
-                                        Integer.valueOf(o.get("chk_frances").toString()),
-                                        Integer.valueOf(o.get("chk_portugues").toString()),
-                                        Integer.valueOf(o.get("chk_italiano").toString()),
-                                        Integer.valueOf(o.get("chk_hp").toString()),
-                                        Integer.valueOf(o.get("chk_hu").toString()),
-                                        Integer.valueOf(o.get("chk_hc").toString()),
-                                        Integer.valueOf(o.get("chk_ha").toString()),
-                                        Integer.valueOf(o.get("chk_cine").toString()),
-                                        Integer.valueOf(o.get("chk_teatro").toString()),
-                                        Integer.valueOf(o.get("chk_pintura").toString()),
-                                        Integer.valueOf(o.get("chk_arquitectura").toString()),
-                                        Integer.valueOf(o.get("chk_novela").toString()),
-                                        Integer.valueOf(o.get("chk_drama").toString()),
-                                        Integer.valueOf(o.get("chk_historia").toString()),
-                                        Integer.valueOf(o.get("chk_autoayuda").toString()),
-                                        Integer.valueOf(o.get("chk_thriller").toString()),
-                                        Integer.valueOf(o.get("chk_taichi").toString()),
-                                        Integer.valueOf(o.get("chk_yoga").toString()),
-                                        Integer.valueOf(o.get("chk_meditacion").toString()),
-                                        Integer.valueOf(o.get("chk_rmp").toString()),
-                                        Integer.valueOf(o.get("chk_baile").toString()),
-                                        Integer.valueOf(o.get("chk_estiramientos").toString()),
-                                        Integer.valueOf(o.get("chk_caminata").toString()),
-                                        Integer.valueOf(o.get("chk_gimnasia").toString()),
-                                        Integer.valueOf(o.get("chk_biodanza").toString())
-                                );
-                                getAdultPreferences();
-//                                md.dismiss();
-                            }else{
-//                                md.dismiss();
-                                Toast.makeText(getActivity(),"No se pudo obtener sus preferencias",Toast.LENGTH_LONG).show();
-                            }
-                        } catch (Exception e) {
-//                            md.dismiss();
-                            Toast.makeText(getActivity(),"No se pudo obtener sus preferencias",Toast.LENGTH_LONG).show();
+                        md.dismiss();
+                        if(response.equals("true")){
+                            alertDialog.dismiss();
+                            Toast.makeText(getActivity(), "Solicitud registrada exitosamente", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getActivity(), "Ocurrió un error\nIntente nuevamente", Toast.LENGTH_SHORT).show();
                         }
+
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
-    public void getAdultPreferences(){
-//        final MaterialDialog md=new MaterialDialog.Builder(context)
-//                .content("Obteniendo preferencias")
-//                .progress(true,0)
-//                .cancelable(false)
-//                .backgroundColor(Color.WHITE)
-//                .contentColor(Color.BLACK)
-//                .show();
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String url ="https://espacioseguro.pe/php_connection/kevin/getPreferences.php?idUsuario="+u.getId();
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println("adulto_mayor");
-                        System.out.println(response);
-                        JSONParser jp = new JSONParser();
-                        try {
-                            JSONArray a=(JSONArray)jp.parse(response);
-                            if(a.size()!=0){
-                                JSONObject o=(JSONObject)a.get(0);
-                                Gson g=new Gson();
-                                adult=g.fromJson(o.toJSONString(),Usuario.class);
-//                                md.dismiss();
-                                try{
-                                    Model model=new Model();
-                                    adult=new Usuario(
-                                            Integer.valueOf(o.get("chk_guitarra").toString()),
-                                            Integer.valueOf(o.get("chk_timbales").toString()),
-                                            Integer.valueOf(o.get("chk_piano").toString()),
-                                            Integer.valueOf(o.get("chk_violin").toString()),
-                                            Integer.valueOf(o.get("chk_saxofon").toString()),
-                                            Integer.valueOf(o.get("chk_trompeta").toString()),
-                                            Integer.valueOf(o.get("chk_bateria").toString()),
-                                            Integer.valueOf(o.get("chk_tejido").toString()),
-                                            Integer.valueOf(o.get("chk_costura").toString()),
-                                            Integer.valueOf(o.get("chk_manualidades").toString()),
-                                            Integer.valueOf(o.get("chk_escultura").toString()),
-                                            Integer.valueOf(o.get("chk_ajedrez").toString()),
-                                            Integer.valueOf(o.get("chk_ludo").toString()),
-                                            Integer.valueOf(o.get("chk_damas").toString()),
-                                            Integer.valueOf(o.get("chk_damas_chinas").toString()),
-                                            Integer.valueOf(o.get("chk_ingles").toString()),
-                                            Integer.valueOf(o.get("chk_aleman").toString()),
-                                            Integer.valueOf(o.get("chk_frances").toString()),
-                                            Integer.valueOf(o.get("chk_portugues").toString()),
-                                            Integer.valueOf(o.get("chk_italiano").toString()),
-                                            Integer.valueOf(o.get("chk_hp").toString()),
-                                            Integer.valueOf(o.get("chk_hu").toString()),
-                                            Integer.valueOf(o.get("chk_hc").toString()),
-                                            Integer.valueOf(o.get("chk_ha").toString()),
-                                            Integer.valueOf(o.get("chk_cine").toString()),
-                                            Integer.valueOf(o.get("chk_teatro").toString()),
-                                            Integer.valueOf(o.get("chk_pintura").toString()),
-                                            Integer.valueOf(o.get("chk_arquitectura").toString()),
-                                            Integer.valueOf(o.get("chk_novela").toString()),
-                                            Integer.valueOf(o.get("chk_drama").toString()),
-                                            Integer.valueOf(o.get("chk_historia").toString()),
-                                            Integer.valueOf(o.get("chk_autoayuda").toString()),
-                                            Integer.valueOf(o.get("chk_thriller").toString()),
-                                            Integer.valueOf(o.get("chk_taichi").toString()),
-                                            Integer.valueOf(o.get("chk_yoga").toString()),
-                                            Integer.valueOf(o.get("chk_meditacion").toString()),
-                                            Integer.valueOf(o.get("chk_rmp").toString()),
-                                            Integer.valueOf(o.get("chk_baile").toString()),
-                                            Integer.valueOf(o.get("chk_estiramientos").toString()),
-                                            Integer.valueOf(o.get("chk_caminata").toString()),
-                                            Integer.valueOf(o.get("chk_gimnasia").toString()),
-                                            Integer.valueOf(o.get("chk_biodanza").toString())
-                                    );
-
-                                    afinidad=model.calcularAfinidadTotal(adult,volunteer_pref);
-                                    System.out.println("afinidad: "+afinidad);
-                                    vol_afinidad.setText(String.valueOf(afinidad*100)+"%");
-//                                    Toast.makeText(context, String.valueOf(afinidad*100)+"%", Toast.LENGTH_SHORT).show();
-                                }catch (Exception e){
-                                    Toast.makeText(getActivity(), "Error al calcular afinidad: "+e, Toast.LENGTH_SHORT).show();
-                                }
-                            }else{
-//                                md.dismiss();
-                                Toast.makeText(getActivity(),"No se pudo obtener sus preferencias",Toast.LENGTH_LONG).show();
-                            }
-                        } catch (Exception e) {
-//                            md.dismiss();
-                            Toast.makeText(getActivity(),"No se pudo obtener sus preferencias",Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                md.dismiss();
                 Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });

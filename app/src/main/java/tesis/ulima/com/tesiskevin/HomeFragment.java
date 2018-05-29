@@ -32,7 +32,7 @@ public class HomeFragment extends Fragment {
     User u;
 
     TextView user_name,user_direction;
-    Button find_volunteer;
+    Button find_volunteer,find_request;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -64,6 +64,13 @@ public class HomeFragment extends Fragment {
         user_name.setText(u.getNombre());
         user_direction.setText(u.getDireccion());
         find_volunteer=view.findViewById(R.id.btn_find_volunteers);
+        find_request=view.findViewById(R.id.btn_find_request);
+
+        if(u.getTipo_usuario()==2){
+            find_volunteer.setVisibility(View.GONE);
+        }else{
+            find_request.setVisibility(View.GONE);
+        }
         find_volunteer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,6 +78,18 @@ public class HomeFragment extends Fragment {
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 Fragment fr;
                 fr=VolunteerFragment.newInstance();
+                fragmentTransaction.replace(R.id.flaContenido,fr);
+                fragmentTransaction.commit();
+            }
+        });
+
+        find_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                Fragment fr;
+                fr=VolunteerRequestFragment.newInstance();
                 fragmentTransaction.replace(R.id.flaContenido,fr);
                 fragmentTransaction.commit();
             }

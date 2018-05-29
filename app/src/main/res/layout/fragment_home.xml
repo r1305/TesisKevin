@@ -47,6 +47,16 @@
             android:layout_marginLeft="50dp"
             android:textColor="#fff"
             android:background="#0000ff"/>
+
+        <Button
+            android:id="@+id/btn_find_request"
+            android:text="Buscar Solicitudes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="50dp"
+            android:layout_marginLeft="50dp"
+            android:textColor="#fff"
+            android:background="#0000ff"/>
     </LinearLayout>
 
 </FrameLayout>

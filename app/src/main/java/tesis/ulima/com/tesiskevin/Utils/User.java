@@ -12,6 +12,7 @@ public class User {
     public String nombre;
     public String fcm;
     public String direccion;
+    public int tipo_usuario;
 
 
 
@@ -48,5 +49,13 @@ public class User {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public int getTipo_usuario() {
+        return tipo_usuario;
+    }
+
+    public void setTipo_usuario(int tipo_usuario) {
+        this.tipo_usuario = tipo_usuario;
     }
 }

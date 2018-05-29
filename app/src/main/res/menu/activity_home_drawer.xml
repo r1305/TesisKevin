@@ -13,6 +13,10 @@
             android:title="Voluntarios"/>
 
         <item
+            android:id="@+id/nav_programs"
+            android:title="Visitas Programadas"/>
+
+        <item
             android:id="@+id/nav_requests"
             android:title="Solicitudes"/>
     </group>
