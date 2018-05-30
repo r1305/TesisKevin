@@ -18,6 +18,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import org.json.simple.JSONArray;
@@ -34,10 +37,14 @@ import tesis.ulima.com.tesiskevin.Utils.User;
 
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder> {
     List<JSONObject> l =new ArrayList<>();
+    List<DataSnapshot> l2 =new ArrayList<>();
     User u;
     SessionManager session;
     Context context;
     MaterialDialog md;
+
+    FirebaseDatabase database;
+    DatabaseReference myRef;
 
     @NonNull
     @Override
@@ -47,25 +54,39 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         HashMap<String,String> user=session.getUserDetails();
         Gson g=new Gson();
         u=g.fromJson(user.get(SessionManager.KEY_VALUES),User.class);
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("request");
         return new RequestAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_request,parent,false));
     }
 
-    public RequestAdapter(List<JSONObject> l) {
+    public RequestAdapter(List<JSONObject> l,List<DataSnapshot> l2) {
         this.l = l;
+        this.l2 = l2;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 //        getRequest();
-        final JSONObject o=l.get(position);
-        holder.name.setText((String)o.get("nombre"));
-        holder.direction.setText((String)o.get("direccion"));
-        holder.afinidad.setText((String)o.get("afinidad")+"%");
-        System.out.println(o.get("estado"));
-        if(o.get("estado").equals("1")){
-            holder.btn_cancel.setVisibility(View.GONE);
-            holder.btn_accept.setVisibility(View.GONE);
+//        final JSONObject o=l.get(position);
+        final DataSnapshot ds=l2.get(position);
+        final HashMap<String,String> request=(HashMap<String,String>)ds.getValue();
+        if(request.get("estado").equals("0")) {
+            System.out.println(request.get("estado"));
+        }else{
+            l2.remove(position);
         }
+//        holder.name.setText((String)o.get("nombre"));
+        holder.name.setText(request.get("nombre"));
+//        holder.direction.setText((String)o.get("direccion"));
+        holder.direction.setText(request.get("direccion"));
+//        holder.afinidad.setText((String)o.get("afinidad")+"%");
+        holder.afinidad.setText(request.get("afinidad"));
+//        System.out.println(o.get("estado"));
+//        if(o.get("estado").equals("1")){
+//            holder.btn_cancel.setVisibility(View.GONE);
+//            holder.btn_accept.setVisibility(View.GONE);
+//        }
+
         holder.btn_accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +97,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                         .backgroundColor(Color.WHITE)
                         .contentColor(Color.BLACK)
                         .show();
-                updateRequest(o.get("id").toString(),"1");
+//                updateRequest(o.get("id").toString(),"1");
+                updateRequestFireBase(ds.getKey(),"1");
             }
         });
 
@@ -90,17 +112,18 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                         .backgroundColor(Color.WHITE)
                         .contentColor(Color.BLACK)
                         .show();
-                updateRequest(o.get("id").toString(),"2");
+//                updateRequest(o.get("id").toString(),"2");
+                updateRequestFireBase(ds.getKey(),"2");
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        if(l==null){
+        if(l2==null){
             return 0;
         }else {
-            return l.size();
+            return l2.size();
         }
     }
 
@@ -184,5 +207,16 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
         });
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    public void updateRequestFireBase(String key,String status){
+        myRef.child(key).child("estado").setValue(status);
+        md.dismiss();
+        if(status=="1"){
+            Toast.makeText(context, "Solicitud aceptada", Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(context, "Solicitud rechazada", Toast.LENGTH_SHORT).show();
+        }
+
     }
 }

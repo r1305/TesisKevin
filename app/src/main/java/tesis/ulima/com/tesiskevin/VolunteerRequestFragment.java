@@ -3,6 +3,7 @@ package tesis.ulima.com.tesiskevin;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,6 +20,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import org.json.simple.JSONArray;
@@ -38,10 +46,15 @@ public class VolunteerRequestFragment extends Fragment {
     RecyclerView activity;
     RequestAdapter adapter;
     List<JSONObject> l=new ArrayList<>();
+    List<DataSnapshot> l2=new ArrayList<>();
     SessionManager session;
     MaterialDialog md;
     SwipeRefreshLayout swipeRefreshLayout;
     User u;
+
+    FirebaseDatabase database;
+    DatabaseReference myRef;
+    Query query;
 
     public VolunteerRequestFragment() {
         // Required empty public constructor
@@ -57,6 +70,8 @@ public class VolunteerRequestFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=this.getContext();
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("request");
     }
 
     @Override
@@ -70,13 +85,29 @@ public class VolunteerRequestFragment extends Fragment {
         u=g.fromJson(user.get(SessionManager.KEY_VALUES),User.class);
         activity=v.findViewById(R.id.recycler_view_volunteer_request);
         activity.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter=new RequestAdapter(l);
+        adapter=new RequestAdapter(l,l2);
         swipeRefreshLayout=v.findViewById(R.id.swipe_volunteer_request);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
-                getRequest();
+//                getRequest();
+                query.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        l2.clear();
+                        for (DataSnapshot values: dataSnapshot.getChildren()) {
+                            // TODO: handle the post
+                            l2.add(values);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(context, "No se pudo obtener las solicitudes", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
 
@@ -87,7 +118,80 @@ public class VolunteerRequestFragment extends Fragment {
                 .backgroundColor(Color.WHITE)
                 .contentColor(Color.BLACK)
                 .show();
-        getRequest();
+        myRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                md.show();
+                l2.clear();
+                for (DataSnapshot values: dataSnapshot.getChildren()) {
+                    // TODO: handle the post
+                    l2.add(values);
+                }
+                md.dismiss();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                md.show();
+                l2.clear();
+                for (DataSnapshot values: dataSnapshot.getChildren()) {
+                    // TODO: handle the post
+                    l2.add(values);
+                }
+                md.dismiss();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                md.show();
+                l2.clear();
+                for (DataSnapshot values: dataSnapshot.getChildren()) {
+                    // TODO: handle the post
+                    l2.add(values);
+                }
+                md.dismiss();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                md.show();
+                l2.clear();
+                for (DataSnapshot values: dataSnapshot.getChildren()) {
+                    // TODO: handle the post
+                    l2.add(values);
+                }
+                md.dismiss();
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "No se pudo obtener las solicitudes", Toast.LENGTH_SHORT).show();
+            }
+        });
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                l2.clear();
+                for (DataSnapshot values: dataSnapshot.getChildren()) {
+                    // TODO: handle the post
+                    l2.add(values);
+                }
+                md.dismiss();
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                md.dismiss();
+                Toast.makeText(context, "No se pudo obtener las solicitudes", Toast.LENGTH_SHORT).show();
+            }
+        });
+//        getRequest();
 
         activity.setAdapter(adapter);
         return v;

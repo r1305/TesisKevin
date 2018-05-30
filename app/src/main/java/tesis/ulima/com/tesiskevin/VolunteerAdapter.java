@@ -51,7 +51,7 @@ public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerAdapter.View
 
     Context context;
 
-    double afinidad;
+    float afinidad;
 
     @NonNull
     @Override
@@ -89,7 +89,7 @@ public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerAdapter.View
                 FragmentManager fm = ((HomeActivity)context).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fm.beginTransaction();
                 Fragment fr;
-                fr=VolunteerDetail.newInstance(o.get("id").toString(),String.valueOf(afinidad));
+                fr=VolunteerDetail.newInstance(o.get("id").toString(),String.valueOf(holder.afinidad.getText()));
                 fragmentTransaction.replace(R.id.flaContenido,fr);
                 fragmentTransaction.commit();
             }

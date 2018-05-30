@@ -27,6 +27,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import org.json.simple.JSONArray;
@@ -34,6 +36,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import tesis.ulima.com.tesiskevin.Afinidad.Model;
 import tesis.ulima.com.tesiskevin.Afinidad.Usuario;
@@ -45,7 +48,7 @@ public class VolunteerDetail extends Fragment {
     private static final String afinidad_param ="afinidad";
 
     private String volunteer;
-    private float afinidad;
+    private String afinidad;
     private Button btn_back,btn_agendar;
 
     private TextView vol_name,vol_direction,vol_afinidad;
@@ -59,6 +62,9 @@ public class VolunteerDetail extends Fragment {
 
     TextView calendar,time;
     Button btn_caledar,btn_time,btn_cancel_agendar,btn_save_agendar;
+
+    FirebaseDatabase database;
+    DatabaseReference myRef;
 
     public VolunteerDetail() {
         // Required empty public constructor
@@ -80,12 +86,14 @@ public class VolunteerDetail extends Fragment {
         if (getArguments() != null) {
             volunteer = getArguments().getString(idVolunteer);
             System.out.println(volunteer);
-            afinidad=Float.parseFloat( getArguments().getString(afinidad_param));
+            afinidad=getArguments().getString(afinidad_param);
         }
         session=new SessionManager(getActivity());
         HashMap<String,String> user=session.getUserDetails();
         Gson g=new Gson();
         u=g.fromJson(user.get(SessionManager.KEY_VALUES),User.class);
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference("request");
     }
 
     @Override
@@ -157,9 +165,11 @@ public class VolunteerDetail extends Fragment {
                                 .backgroundColor(Color.WHITE)
                                 .contentColor(Color.BLACK)
                                 .show();
-                        createRequest();
+//                        createRequest();
+                        createRequestFireBase();
                     }
                 });
+
             }
         });
         return v;
@@ -213,7 +223,7 @@ public class VolunteerDetail extends Fragment {
                                 System.out.println(o.get("id").toString());
                                 vol_name.setText(o.get("nombre").toString());
                                 vol_direction.setText(o.get("direccion").toString());
-                                vol_afinidad.setText(String.valueOf(afinidad)+"%");
+                                vol_afinidad.setText(String.valueOf(afinidad));
                             }
                         } catch (Exception e) {
                             Toast.makeText(getContext(),"Intente luego", Toast.LENGTH_SHORT).show();
@@ -263,5 +273,21 @@ public class VolunteerDetail extends Fragment {
         });
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    public void createRequestFireBase(){
+        Map<String, String> data= new HashMap<String, String>();
+        data.put("idAdulto",u.getId());
+        data.put("idVoluntario",volunteer);
+        data.put("fecha",calendar.getText().toString());
+        data.put("hora",time.getText().toString());
+        data.put("afinidad",afinidad);
+        data.put("estado","0");
+        data.put("nombre",u.getNombre());
+        data.put("direccion",u.getDireccion());
+
+        myRef.push().setValue(data);
+        alertDialog.dismiss();
+        Toast.makeText(getContext(), "Solicitud registrada correctamente", Toast.LENGTH_SHORT).show();
     }
 }
