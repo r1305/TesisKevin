@@ -19,10 +19,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
@@ -82,30 +84,15 @@ public class VisitasFragment extends Fragment {
         activity.setLayoutManager(new LinearLayoutManager(getContext()));
         srefresh=view.findViewById(R.id.swipe_visitas);
         adapter=new VisitasAdapter(l,l2);
-
+        final Query query=FirebaseDatabase.getInstance().getReference("request")
+                .orderByChild("estado").equalTo(1);
+        query.addValueEventListener(valueEventListener);
         srefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 srefresh.setRefreshing(true);
 //                getVisitas();
-                myRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        l2.clear();
-                        for (DataSnapshot values: dataSnapshot.getChildren()) {
-                            // TODO: handle the post
-                            l2.add(values);
-                        }
-                        srefresh.setRefreshing(false);
-                        adapter.notifyDataSetChanged();
-                        md.dismiss();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+                query.addValueEventListener(valueEventListener);
             }
         });
         md=new MaterialDialog.Builder(getContext())
@@ -115,27 +102,31 @@ public class VisitasFragment extends Fragment {
                 .backgroundColor(Color.WHITE)
                 .contentColor(Color.BLACK)
                 .show();
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                l2.clear();
-                for (DataSnapshot values: dataSnapshot.getChildren()) {
-                    // TODO: handle the post
-                    l2.add(values);
-                }
-                adapter.notifyDataSetChanged();
-                md.dismiss();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 //        getVisitas();
         activity.setAdapter(adapter);
         return view;
     }
+
+    ValueEventListener valueEventListener=new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            l2.clear();
+            for (DataSnapshot values: dataSnapshot.getChildren()) {
+                // TODO: handle the post
+                final HashMap<String,Object> request=(HashMap<String,Object>)values.getValue();
+                if((long)request.get("idVoluntario")==Integer.parseInt(u.getId()))
+                    l2.add(values);
+            }
+            adapter.notifyDataSetChanged();
+            srefresh.setRefreshing(false);
+            md.dismiss();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 
     public void getVisitas(){
         RequestQueue queue = Volley.newRequestQueue(getActivity());

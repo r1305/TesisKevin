@@ -3,11 +3,13 @@ package tesis.ulima.com.tesiskevin;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -69,18 +71,21 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 //        getRequest();
 //        final JSONObject o=l.get(position);
         final DataSnapshot ds=l2.get(position);
-        final HashMap<String,String> request=(HashMap<String,String>)ds.getValue();
-        if(request.get("estado").equals("0")) {
-            System.out.println(request.get("estado"));
-        }else{
-            l2.remove(position);
-        }
+        final HashMap<String,Object> request=(HashMap<String,Object>)ds.getValue();
+
+//        if(request.get("estado")=="0") {
+//            holder.card.setVisibility(View.VISIBLE);
+//            holder.request_linear.setVisibility(View.VISIBLE);
+//        }else{
+//            holder.card.setVisibility(View.GONE);
+//            holder.request_linear.setVisibility(View.GONE);
+//        }
 //        holder.name.setText((String)o.get("nombre"));
-        holder.name.setText(request.get("nombre"));
+        holder.name.setText((String)request.get("nombre"));
 //        holder.direction.setText((String)o.get("direccion"));
-        holder.direction.setText(request.get("direccion"));
+        holder.direction.setText((String)request.get("direccion"));
 //        holder.afinidad.setText((String)o.get("afinidad")+"%");
-        holder.afinidad.setText(request.get("afinidad"));
+        holder.afinidad.setText((String)request.get("afinidad"));
 //        System.out.println(o.get("estado"));
 //        if(o.get("estado").equals("1")){
 //            holder.btn_cancel.setVisibility(View.GONE);
@@ -131,9 +136,13 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
         TextView name,direction,afinidad;
         Button btn_cancel,btn_accept;
+        CardView card;
+        LinearLayout request_linear;
 
         private ViewHolder(View itemView) {
             super(itemView);
+            request_linear=itemView.findViewById(R.id.request_linear);
+            card=itemView.findViewById(R.id.request_card_view);
             name=itemView.findViewById(R.id.request_name);
             direction=itemView.findViewById(R.id.request_direction);
             afinidad=itemView.findViewById(R.id.request_afinidad);
@@ -210,7 +219,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     }
 
     public void updateRequestFireBase(String key,String status){
-        myRef.child(key).child("estado").setValue(status);
+        myRef.child(key).child("estado").setValue(Integer.parseInt(status));
         md.dismiss();
         if(status=="1"){
             Toast.makeText(context, "Solicitud aceptada", Toast.LENGTH_SHORT).show();

@@ -70,8 +70,6 @@ public class VolunteerRequestFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=this.getContext();
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("request");
     }
 
     @Override
@@ -87,27 +85,15 @@ public class VolunteerRequestFragment extends Fragment {
         activity.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter=new RequestAdapter(l,l2);
         swipeRefreshLayout=v.findViewById(R.id.swipe_volunteer_request);
+        final Query query=FirebaseDatabase.getInstance().getReference("request")
+                .orderByChild("estado").equalTo(0);
+        query.addValueEventListener(valueEventListener);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 swipeRefreshLayout.setRefreshing(true);
 //                getRequest();
-                query.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        l2.clear();
-                        for (DataSnapshot values: dataSnapshot.getChildren()) {
-                            // TODO: handle the post
-                            l2.add(values);
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(context, "No se pudo obtener las solicitudes", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                query.addValueEventListener(valueEventListener);
             }
         });
 
@@ -118,84 +104,33 @@ public class VolunteerRequestFragment extends Fragment {
                 .backgroundColor(Color.WHITE)
                 .contentColor(Color.BLACK)
                 .show();
-        myRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                md.show();
-                l2.clear();
-                for (DataSnapshot values: dataSnapshot.getChildren()) {
-                    // TODO: handle the post
-                    l2.add(values);
-                }
-                md.dismiss();
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                md.show();
-                l2.clear();
-                for (DataSnapshot values: dataSnapshot.getChildren()) {
-                    // TODO: handle the post
-                    l2.add(values);
-                }
-                md.dismiss();
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                md.show();
-                l2.clear();
-                for (DataSnapshot values: dataSnapshot.getChildren()) {
-                    // TODO: handle the post
-                    l2.add(values);
-                }
-                md.dismiss();
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                md.show();
-                l2.clear();
-                for (DataSnapshot values: dataSnapshot.getChildren()) {
-                    // TODO: handle the post
-                    l2.add(values);
-                }
-                md.dismiss();
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(context, "No se pudo obtener las solicitudes", Toast.LENGTH_SHORT).show();
-            }
-        });
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                l2.clear();
-                for (DataSnapshot values: dataSnapshot.getChildren()) {
-                    // TODO: handle the post
-                    l2.add(values);
-                }
-                md.dismiss();
-                adapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                md.dismiss();
-                Toast.makeText(context, "No se pudo obtener las solicitudes", Toast.LENGTH_SHORT).show();
-            }
-        });
+        query.addValueEventListener(valueEventListener);
 //        getRequest();
 
         activity.setAdapter(adapter);
         return v;
     }
+
+    ValueEventListener valueEventListener=new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            l2.clear();
+            for (DataSnapshot values: dataSnapshot.getChildren()) {
+                // TODO: handle the post
+                final HashMap<String,Object> request=(HashMap<String,Object>)values.getValue();
+                if((long)request.get("idVoluntario")==Integer.parseInt(u.getId()))
+                    l2.add(values);
+            }
+            adapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
+            md.dismiss();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
 
     public void getRequest(){
         RequestQueue queue = Volley.newRequestQueue(getActivity());

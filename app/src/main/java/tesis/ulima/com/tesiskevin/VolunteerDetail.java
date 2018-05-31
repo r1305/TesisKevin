@@ -276,18 +276,19 @@ public class VolunteerDetail extends Fragment {
     }
 
     public void createRequestFireBase(){
-        Map<String, String> data= new HashMap<String, String>();
-        data.put("idAdulto",u.getId());
-        data.put("idVoluntario",volunteer);
+        Map<String, Object> data= new HashMap<String, Object>();
+        data.put("idAdulto",Integer.parseInt(u.getId()));
+        data.put("idVoluntario",Integer.parseInt(volunteer));
         data.put("fecha",calendar.getText().toString());
         data.put("hora",time.getText().toString());
         data.put("afinidad",afinidad);
-        data.put("estado","0");
+        data.put("estado",0);
         data.put("nombre",u.getNombre());
         data.put("direccion",u.getDireccion());
 
         myRef.push().setValue(data);
         alertDialog.dismiss();
+        md.dismiss();
         Toast.makeText(getContext(), "Solicitud registrada correctamente", Toast.LENGTH_SHORT).show();
     }
 }

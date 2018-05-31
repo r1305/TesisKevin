@@ -2,12 +2,14 @@ package tesis.ulima.com.tesiskevin;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -55,16 +57,17 @@ public class VisitasAdapter extends RecyclerView.Adapter<VisitasAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 //        final JSONObject o=l.get(position);
         final DataSnapshot ds=l2.get(position);
-        final HashMap<String,String> request=(HashMap<String,String>)ds.getValue();
-        System.out.println(request.get("estado").equals("1"));
-        System.out.println(request.get("idVoluntario").equals(u.getId()));
-        if(request.get("estado").equals("1") && request.get("idVoluntario").equals(u.getId())) {
-        }else{
-            l2.remove(position);
-        }
+        final HashMap<String,Object> request=(HashMap<String,Object>)ds.getValue();
+//        if(request.get("estado")=="1" && request.get("idVoluntario").equals(u.getId())) {
+//            holder.card_view.setVisibility(View.VISIBLE);
+//            holder.linear.setVisibility(View.VISIBLE);
+//        }else{
+//            holder.card_view.setVisibility(View.GONE);
+//            holder.linear.setVisibility(View.GONE);
+//        }
 //        holder.name.setText((String)o.get("nombre"));
 //        holder.fecha.setText((String)o.get("fecha")+ " " +o.get("hora"));
-        holder.name.setText(request.get("nombre"));
+        holder.name.setText((String)request.get("nombre"));
         holder.fecha.setText(request.get("fecha")+ " " +request.get("hora"));
     }
 
@@ -81,9 +84,13 @@ public class VisitasAdapter extends RecyclerView.Adapter<VisitasAdapter.ViewHold
 
         TextView name,fecha;
         ImageView arrow;
+        CardView card_view;
+        LinearLayout linear;
 
         private ViewHolder(View itemView) {
             super(itemView);
+            linear=itemView.findViewById(R.id.visita_linear);
+            card_view=itemView.findViewById(R.id.visita_card_view);
             name=itemView.findViewById(R.id.visita_name);
             fecha=itemView.findViewById(R.id.visita_fecha);
             arrow=itemView.findViewById(R.id.visita_arrow);
