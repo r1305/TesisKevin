@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import tesis.ulima.com.tesiskevin.HomeActivity;
 import tesis.ulima.com.tesiskevin.LoginActivity;
+import tesis.ulima.com.tesiskevin.MainActivity;
 
 /**
  * Created by Julian on 4/11/2017.
@@ -68,6 +69,7 @@ public class SessionManager {
 
             // Staring Login Activity
             _context.startActivity(i);
+
         }else{
             // user is not logged in redirect him to Login Activity
             Intent i = new Intent(_context, HomeActivity.class);

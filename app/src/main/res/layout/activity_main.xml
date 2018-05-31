@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/logo_ulima"
+        android:src="@drawable/logo_adulto"
         android:foregroundGravity="center"/>
 
 </android.support.constraint.ConstraintLayout>
