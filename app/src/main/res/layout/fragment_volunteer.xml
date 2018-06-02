@@ -4,15 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".VolunteerFragment">
-    <ScrollView
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view_volunteer"
+        android:layout_height="wrap_content"
+        android:id="@+id/swipe_volunteers">
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3sp"
-            android:layout_marginRight="3sp">
-        </android.support.v7.widget.RecyclerView>
-    </ScrollView>
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_volunteer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3sp"
+                android:layout_marginRight="3sp">
+            </android.support.v7.widget.RecyclerView>
+        </ScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

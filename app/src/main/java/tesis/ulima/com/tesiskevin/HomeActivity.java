@@ -140,7 +140,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         String params="?idUser="+u.getId()+"&fcm="+ FirebaseInstanceId.getInstance().getToken();
         String url = "https://espacioseguro.pe/php_connection/kevin/updateFCM.php"+params;
 
-        StringRequest postRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>()
                 {
                     @Override

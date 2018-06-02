@@ -1,6 +1,7 @@
 package tesis.ulima.com.tesiskevin;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -39,19 +40,16 @@ import tesis.ulima.com.tesiskevin.Utils.User;
 public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerAdapter.ViewHolder>{
 
     List<JSONObject> l =new ArrayList<>();
-    View.OnClickListener listener;
-    private MaterialDialog md;
-    private String name_alarm;
-    private EditText userInput;
     User u;
     SessionManager session;
 
-    Usuario volunteer;
-    Usuario adult;
+    private Usuario volunteer;
+    private Usuario adult;
 
     Context context;
 
-    float afinidad;
+    private float afinidad;
+    MaterialDialog md;
 
     @NonNull
     @Override
@@ -77,6 +75,13 @@ public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerAdapter.View
             @Override
             public void onClick(View v) {
                 try{
+                    md=new MaterialDialog.Builder(context)
+                            .content("Cargando")
+                            .progress(true,0)
+                            .cancelable(false)
+                            .backgroundColor(Color.WHITE)
+                            .contentColor(Color.BLACK)
+                            .show();
                     getVolunteerPreferences(o.get("id").toString(),position);
                 }catch (Exception e){
                     Toast.makeText(context, "Error al calcular afinidad: "+e, Toast.LENGTH_SHORT).show();
@@ -86,12 +91,16 @@ public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerAdapter.View
         holder.arrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fm = ((HomeActivity)context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                Fragment fr;
-                fr=VolunteerDetail.newInstance(o.get("id").toString(),String.valueOf(holder.afinidad.getText()));
-                fragmentTransaction.replace(R.id.flaContenido,fr);
-                fragmentTransaction.commit();
+                if(holder.afinidad.getText().equals("0.0%")){
+                    Toast.makeText(context,"Haga click sobre el usuario para ver su afinidad antes de enviarle una solicitud",Toast.LENGTH_LONG).show();
+                }else{
+                    FragmentManager fm = ((HomeActivity)context).getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    Fragment fr;
+                    fr=VolunteerDetail.newInstance(o.get("id").toString(),String.valueOf(holder.afinidad.getText()));
+                    fragmentTransaction.replace(R.id.flaContenido,fr);
+                    fragmentTransaction.commit();
+                }
             }
         });
 
@@ -202,13 +211,6 @@ public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerAdapter.View
     }
 
     public void getAdultPreferences(final int position){
-//        final MaterialDialog md=new MaterialDialog.Builder(context)
-//                .content("Obteniendo preferencias")
-//                .progress(true,0)
-//                .cancelable(false)
-//                .backgroundColor(Color.WHITE)
-//                .contentColor(Color.BLACK)
-//                .show();
         RequestQueue queue = Volley.newRequestQueue(context);
         String url ="https://espacioseguro.pe/php_connection/kevin/getPreferences.php?idUsuario="+u.getId();
         // Request a string response from the provided URL.
@@ -275,15 +277,14 @@ public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerAdapter.View
 
                                     afinidad=model.calcularAfinidadTotal(adult,volunteer);
                                     VolunteerAdapter.this.notifyItemChanged(position);
+                                    md.dismiss();
                                 }catch (Exception e){
                                     Toast.makeText(context, "Error al calcular afinidad: "+e, Toast.LENGTH_SHORT).show();
                                 }
                             }else{
-//                                md.dismiss();
                                 Toast.makeText(context,"No se pudo obtener sus preferencias adutlo",Toast.LENGTH_LONG).show();
                             }
                         } catch (Exception e) {
-//                            md.dismiss();
                             Toast.makeText(context,"adulto: "+e.toString(),Toast.LENGTH_LONG).show();
                         }
                     }

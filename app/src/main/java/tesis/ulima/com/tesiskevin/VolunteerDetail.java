@@ -2,10 +2,8 @@ package tesis.ulima.com.tesiskevin;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -38,8 +36,6 @@ import org.json.simple.parser.JSONParser;
 import java.util.HashMap;
 import java.util.Map;
 
-import tesis.ulima.com.tesiskevin.Afinidad.Model;
-import tesis.ulima.com.tesiskevin.Afinidad.Usuario;
 import tesis.ulima.com.tesiskevin.Utils.SessionManager;
 import tesis.ulima.com.tesiskevin.Utils.User;
 
@@ -165,7 +161,6 @@ public class VolunteerDetail extends Fragment {
                                 .backgroundColor(Color.WHITE)
                                 .contentColor(Color.BLACK)
                                 .show();
-//                        createRequest();
                         createRequestFireBase();
                     }
                 });
@@ -244,37 +239,6 @@ public class VolunteerDetail extends Fragment {
         queue.add(postRequest);
     }
 
-    public void createRequest(){
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String params="?idAdulto="+u.getId()+"&idVoluntario="+volunteer+"&fecha="+calendar.getText()+"&hora="+time.getText()+"&afinidad="+afinidad;
-        String url ="https://espacioseguro.pe/php_connection/kevin/createRequest.php"+params;
-        System.out.println(url);
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println(response);
-                        md.dismiss();
-                        if(response.equals("true")){
-                            alertDialog.dismiss();
-                            Toast.makeText(getActivity(), "Solicitud registrada exitosamente", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(getActivity(), "Ocurrió un error\nIntente nuevamente", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                md.dismiss();
-                Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
     public void createRequestFireBase(){
         Map<String, Object> data= new HashMap<String, Object>();
         data.put("idAdulto",Integer.parseInt(u.getId()));
@@ -289,6 +253,34 @@ public class VolunteerDetail extends Fragment {
         myRef.push().setValue(data);
         alertDialog.dismiss();
         md.dismiss();
+
+        sendNotification();
         Toast.makeText(getContext(), "Solicitud registrada correctamente", Toast.LENGTH_SHORT).show();
+    }
+
+    public void sendNotification(){
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        String url = "https://espacioseguro.pe/php_connection/kevin/sendNotification.php?idUser="+Integer.parseInt(volunteer);
+
+        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>()
+                {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+                        System.out.println(response);
+                    }
+                },
+                new Response.ErrorListener()
+                {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // error
+                        Log.d("Error.Response", error.toString());
+                    }
+                }
+        );
+        // Access the RequestQueue through your singleton class.
+        queue.add(postRequest);
     }
 }

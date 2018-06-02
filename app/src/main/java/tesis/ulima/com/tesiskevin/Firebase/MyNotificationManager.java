@@ -48,7 +48,8 @@ public class MyNotificationManager {
 
         NotificationCompat.Builder mBuilder;
         mBuilder = new NotificationCompat.Builder(mCtx);
-        mBuilder.setSmallIcon(R.drawable.logo_ulima);
+        mBuilder.setSmallIcon(R.drawable.logo_adulto);
+        mBuilder.setBadgeIconType(R.drawable.logo_adulto);
         mBuilder.setContentTitle(title);
         mBuilder.setContentText(body);
         mBuilder.setContentIntent(pendingIntent);

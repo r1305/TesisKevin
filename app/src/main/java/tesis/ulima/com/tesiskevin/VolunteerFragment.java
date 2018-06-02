@@ -68,14 +68,14 @@ public class VolunteerFragment extends Fragment {
         activity=view.findViewById(R.id.recycler_view_volunteer);
         activity.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter=new VolunteerAdapter(l);
-
-        /*srefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        srefresh=view.findViewById(R.id.swipe_volunteers);
+        srefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 srefresh.setRefreshing(true);
                 getVolunteers();
             }
-        });*/
+        });
         md=new MaterialDialog.Builder(getContext())
                 .content("Cargando")
                 .progress(true,0)
@@ -106,7 +106,7 @@ public class VolunteerFragment extends Fragment {
                             for(int i=0;i<ja.size();i++){
                                 l.add((JSONObject)ja.get(i));
                             }
-//                            srefresh.setRefreshing(false);
+                            srefresh.setRefreshing(false);
                             adapter.notifyDataSetChanged();
                             md.dismiss();
                         } catch (Exception e) {

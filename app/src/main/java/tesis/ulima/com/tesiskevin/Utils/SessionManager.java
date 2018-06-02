@@ -8,7 +8,6 @@ import java.util.HashMap;
 
 import tesis.ulima.com.tesiskevin.HomeActivity;
 import tesis.ulima.com.tesiskevin.LoginActivity;
-import tesis.ulima.com.tesiskevin.MainActivity;
 
 /**
  * Created by Julian on 4/11/2017.
