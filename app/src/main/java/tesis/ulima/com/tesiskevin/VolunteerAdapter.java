@@ -274,6 +274,16 @@ public class VolunteerAdapter extends RecyclerView.Adapter<VolunteerAdapter.View
                                             Integer.valueOf(o2.get("chk_gimnasia").toString()),
                                             Integer.valueOf(o2.get("chk_biodanza").toString())
                                     );
+                                    adult.setIm_weight(Integer.valueOf(o2.get("im_weight").toString()));
+                                    adult.setMc_weight(Integer.valueOf(o2.get("mc_weight").toString()));
+                                    adult.setJm_weight(Integer.valueOf(o2.get("jm_weight").toString()));
+                                    adult.setIdiom_weight(Integer.valueOf(o2.get("idiom_weight").toString()));
+                                    adult.setHist_weight(Integer.valueOf(o2.get("hist_weight").toString()));
+                                    adult.setArte_weight(Integer.valueOf(o2.get("arte_weight").toString()));
+                                    adult.setLectura_weight(Integer.valueOf(o2.get("lectura_weight").toString()));
+                                    adult.setEr_weight(Integer.valueOf(o2.get("er_weight").toString()));
+                                    adult.setEf_weight(Integer.valueOf(o2.get("ef_weight").toString()));
+
 
                                     afinidad=model.calcularAfinidadTotal(adult,volunteer);
                                     VolunteerAdapter.this.notifyItemChanged(position);

@@ -27,6 +27,13 @@
                 android:orientation="vertical">
 
                 <!--Entretenimiento-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Entretenimiento"
+                    android:textColor="#000"
+                    android:gravity="center"
+                    android:textSize="25dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -37,11 +44,27 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginLeft="10dp">
-                        <TextView
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Instrumentos Musicales"
-                            android:textColor="#000"/>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Instrumentos Musicales"
+                                android:textColor="#000"
+                                android:layout_weight="1"/>
+
+                            <EditText
+                                android:id="@+id/im_weight"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#000"
+                                android:inputType="numberDecimal"
+                                android:layout_weight="3"
+                                android:gravity="center"/>
+                        </LinearLayout>
                         <!--Guitarra-->
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -155,11 +178,28 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginLeft="10dp">
-                        <TextView
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Manualidades y confección"
-                            android:textColor="#000"/>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Manualidades y confección"
+                                android:textColor="#000"
+                                android:layout_weight="1"/>
+
+                            <EditText
+                                android:id="@+id/mc_weight"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#000"
+                                android:inputType="numberDecimal"
+                                android:layout_weight="3"
+                                android:gravity="center"/>
+                        </LinearLayout>
                         <!--Tejido-->
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -228,11 +268,28 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginLeft="10dp">
-                        <TextView
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Juegos de Mesa"
-                            android:textColor="#000"/>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Juegos de Mesa"
+                                android:textColor="#000"
+                                android:layout_weight="1"/>
+
+                            <EditText
+                                android:id="@+id/jm_weight"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#000"
+                                android:inputType="numberDecimal"
+                                android:layout_weight="3"
+                                android:gravity="center"/>
+                        </LinearLayout>
                         <!--Ajedrez-->
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -297,6 +354,13 @@
                 </LinearLayout>
 
                 <!--Aprendizaje-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Aprendizaje"
+                    android:textColor="#000"
+                    android:gravity="center"
+                    android:textSize="25dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -307,11 +371,28 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginLeft="10dp">
-                        <TextView
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Idiomas"
-                            android:textColor="#000"/>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Idiomas"
+                                android:textColor="#000"
+                                android:layout_weight="1"/>
+
+                            <EditText
+                                android:id="@+id/idiom_weight"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#000"
+                                android:inputType="numberDecimal"
+                                android:layout_weight="3"
+                                android:gravity="center"/>
+                        </LinearLayout>
                         <!--Inglés-->
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -395,11 +476,28 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginLeft="10dp">
-                        <TextView
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Historia"
-                            android:textColor="#000"/>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Historia"
+                                android:textColor="#000"
+                                android:layout_weight="1"/>
+
+                            <EditText
+                                android:id="@+id/hist_weight"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#000"
+                                android:inputType="numberDecimal"
+                                android:layout_weight="3"
+                                android:gravity="center"/>
+                        </LinearLayout>
                         <!--Historia del Perú-->
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -464,6 +562,13 @@
                 </LinearLayout>
 
                 <!--Arte y Literatura-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Arte y Literatura"
+                    android:textColor="#000"
+                    android:gravity="center"
+                    android:textSize="25dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -474,11 +579,28 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginLeft="10dp">
-                        <TextView
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Arte"
-                            android:textColor="#000"/>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Arte"
+                                android:textColor="#000"
+                                android:layout_weight="1"/>
+
+                            <EditText
+                                android:id="@+id/arte_weight"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#000"
+                                android:inputType="numberDecimal"
+                                android:layout_weight="3"
+                                android:gravity="center"/>
+                        </LinearLayout>
                         <!--Cine-->
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -547,11 +669,28 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginLeft="10dp">
-                        <TextView
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Lectura"
-                            android:textColor="#000"/>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Lectura"
+                                android:textColor="#000"
+                                android:layout_weight="1"/>
+
+                            <EditText
+                                android:id="@+id/lectura_weight"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#000"
+                                android:inputType="numberDecimal"
+                                android:layout_weight="3"
+                                android:gravity="center"/>
+                        </LinearLayout>
                         <!--Novela-->
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -631,6 +770,13 @@
                 </LinearLayout>
 
                 <!--Ejercicios-->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ejercicios"
+                    android:textColor="#000"
+                    android:gravity="center"
+                    android:textSize="25dp"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -641,11 +787,28 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginLeft="10dp">
-                        <TextView
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Ejercicios de Relajación"
-                            android:textColor="#000"/>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Ejercicios de Relajación"
+                                android:textColor="#000"
+                                android:layout_weight="1"/>
+
+                            <EditText
+                                android:id="@+id/er_weight"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#000"
+                                android:inputType="numberDecimal"
+                                android:layout_weight="3"
+                                android:gravity="center"/>
+                        </LinearLayout>
                         <!--Tai Chi-->
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -714,11 +877,28 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_marginLeft="10dp">
-                        <TextView
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Ejercicios Físicos"
-                            android:textColor="#000"/>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Ejercicios Físicos"
+                                android:textColor="#000"
+                                android:layout_weight="1"/>
+
+                            <EditText
+                                android:id="@+id/ef_weight"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="#000"
+                                android:inputType="numberDecimal"
+                                android:layout_weight="3"
+                                android:gravity="center"/>
+                        </LinearLayout>
                         <!--Baile-->
                         <LinearLayout
                             android:layout_width="match_parent"

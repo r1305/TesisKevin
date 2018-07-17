@@ -3,6 +3,7 @@ package tesis.ulima.com.tesiskevin;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -117,13 +119,24 @@ public class PreferencesFragment extends Fragment {
         chk_estiramientos_val,
         chk_caminata_val,
         chk_gimnasia_val,
-        chk_biodanza_val;
+        chk_biodanza_val,
+            im_weight,
+            mc_weight,
+            jm_weight,
+            idiom_weight,
+            hist_weight,
+            arte_weight,
+            lectura_weight,
+            er_weight,
+            ef_weight;
+
 
     SessionManager session;
     User u;
     Button btn_guardar;
 
     MaterialDialog md;
+    EditText im,mc,jm,idiom,hist,arte,lectura,er,ef;
 
     public PreferencesFragment() {
         // Required empty public constructor
@@ -144,8 +157,19 @@ public class PreferencesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v=inflater.inflate(R.layout.fragment_preferences, container, false);
+        final View v=inflater.inflate(R.layout.fragment_preferences, container, false);
         context=getActivity();
+
+        im=v.findViewById(R.id.im_weight);
+        mc=v.findViewById(R.id.mc_weight);
+        jm=v.findViewById(R.id.jm_weight);
+        idiom=v.findViewById(R.id.idiom_weight);
+        hist=v.findViewById(R.id.hist_weight);
+        arte=v.findViewById(R.id.arte_weight);
+        lectura=v.findViewById(R.id.lectura_weight);
+        er=v.findViewById(R.id.er_weight);
+        ef=v.findViewById(R.id.ef_weight);
+
         session=new SessionManager(context);
         HashMap<String,String> user=session.getUserDetails();
         Gson g=new Gson();
@@ -155,8 +179,26 @@ public class PreferencesFragment extends Fragment {
         btn_guardar=v.findViewById(R.id.btn_save_preferences);
         btn_guardar.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                updatePreference();
+            public void onClick(View view) {
+                float sum_entretenimiento=Float.parseFloat(im.getText().toString())+Float.parseFloat(mc.getText().toString())+Float.parseFloat(jm.getText().toString());
+                float sum_aprendizaje=Float.parseFloat(idiom.getText().toString())+Float.parseFloat(hist.getText().toString());
+                float sum_arte=Float.parseFloat(arte.getText().toString())+Float.parseFloat(lectura.getText().toString());
+                float sum_ejercicios=Float.parseFloat(er.getText().toString())+Float.parseFloat(ef.getText().toString());
+                if(sum_entretenimiento!=100){
+                    Snackbar.make(v,"La suma del grupo de Entretenimiento debe ser igual a 100",Snackbar.LENGTH_SHORT).show();
+                }else
+                if(sum_aprendizaje!=100){
+                    Snackbar.make(v,"La suma del grupo de Aprendizaje debe ser igual a 100",Snackbar.LENGTH_SHORT).show();
+                }else
+                if(sum_arte!=100){
+                    Snackbar.make(v,"La suma del grupo de Arte y Literatura debe ser igual a 100",Snackbar.LENGTH_SHORT).show();
+                }else
+                if(sum_ejercicios!=100){
+                    Snackbar.make(v,"La suma del grupo de Ejercicios debe ser igual a 100",Snackbar.LENGTH_SHORT).show();
+                }else
+                if(sum_entretenimiento==100 && sum_aprendizaje==100 && sum_arte==100 && sum_ejercicios==100){
+                    updatePreference();
+                }
             }
         });
         chk_guitarra=v.findViewById(R.id.chk_guitarra);
@@ -760,6 +802,16 @@ public class PreferencesFragment extends Fragment {
         json.put("chk_piano",chk_piano_val);
         json.put("chk_timbales",chk_timbales_val);
         json.put("chk_guitarra",chk_guitarra_val);
+        json.put("im_weight",im.getText().toString());
+        json.put("mc_weight",mc.getText().toString());
+        json.put("jm_weight",jm.getText().toString());
+        json.put("idiom_weight",idiom.getText().toString());
+        json.put("hist_weight",hist.getText().toString());
+        json.put("arte_weight",arte.getText().toString());
+        json.put("lectura_weight",lectura.getText().toString());
+        json.put("er_weight",er.getText().toString());
+        json.put("ef_weight",ef.getText().toString());
+
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.getCache().clear();
 //        String url ="https://espacioseguro.pe/php_connection/kevin/updatePreference.php?usuario="+u.getId()+"&attr="+label+"&val="+chk;
@@ -778,7 +830,6 @@ public class PreferencesFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError error) {
                 md.dismiss();
-                System.out.println(error.toString());
                 Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -811,6 +862,16 @@ public class PreferencesFragment extends Fragment {
                            JSONObject o2=(JSONObject)jp.parse((String)o.get("preferencias"));
 
                             if(a.size()!=0){
+                                im.setText((String)o2.get("im_weight"));
+                                mc.setText((String)o2.get("mc_weight"));
+                                jm.setText((String)o2.get("jm_weight"));
+                                idiom.setText((String)o2.get("idiom_weight"));
+                                hist.setText((String)o2.get("hist_weight"));
+                                arte.setText((String)o2.get("arte_weight"));
+                                lectura.setText((String)o2.get("lectura_weight"));
+                                er.setText((String)o2.get("er_weight"));
+                                ef.setText((String)o2.get("ef_weight"));
+
                                 if((long)o2.get("chk_guitarra")==1){
                                     chk_guitarra.setChecked(true);
                                 }

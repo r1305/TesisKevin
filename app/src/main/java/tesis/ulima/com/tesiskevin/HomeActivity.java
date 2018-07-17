@@ -106,7 +106,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             fr=VolunteerFragment.newInstance();
             fragmentTransaction.replace(R.id.flaContenido,fr);
             fragmentTransaction.commit();
-            Toast.makeText(this, "Voluntarios", Toast.LENGTH_SHORT).show();
             toolbar.setTitle("Lista de Voluntarios");
         }else if(id==R.id.nav_requests){
             if(u.getTipo_usuario()==1){
@@ -117,7 +116,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             fragmentTransaction.replace(R.id.flaContenido,fr);
             fragmentTransaction.commit();
-//            Toast.makeText(this, "Solicitudes", Toast.LENGTH_SHORT).show();
             toolbar.setTitle("Solicitudes");
 
         }else if(id==R.id.nav_logout) {
@@ -126,7 +124,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             fr=VisitasFragment.newInstance();
             fragmentTransaction.replace(R.id.flaContenido,fr);
             fragmentTransaction.commit();
-//            Toast.makeText(this, "Visitas Programadas", Toast.LENGTH_SHORT).show();
             toolbar.setTitle("Visitas Programadas");
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

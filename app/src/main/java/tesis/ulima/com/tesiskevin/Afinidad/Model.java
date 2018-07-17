@@ -7,9 +7,12 @@ public class Model {
         int contador_instrumentos=0;
         int contador_manualidades=0;
         int contador_juegos=0;
-        double regla_instrumentos=0.40;
-        double regla_manualidades=0.30;
-        double regla_juegos=0.30;
+//        double regla_instrumentos=0.40;
+        double regla_instrumentos=usuario.getIm_weight()*0.01;
+//        double regla_manualidades=0.30;
+        double regla_manualidades=usuario.getMc_weight()*0.01;
+//        double regla_juegos=0.30;
+        double regla_juegos=usuario.getJm_weight()*0.01;
         double factor=0.35;
         /*****Instrumentos musicales****/
         if(usuario.getChk_guitarra_val()== usuario2.getChk_guitarra_val() && usuario.getChk_guitarra_val()!=0 && usuario2.getChk_guitarra_val()!=0){contador_instrumentos++;}
@@ -69,8 +72,10 @@ public class Model {
         double afinidadAprendizaje;
         int contador_idiomas=0;
         int contador_historia=0;
-        double regla_idiomas=0.6;
-        double regla_historia=0.4;
+//        double regla_idiomas=0.6;
+        double regla_idiomas=usuario.getIdiom_weight()*0.01;
+//        double regla_historia=0.4;
+        double regla_historia=usuario.getHist_weight()*0.01;
         double factor=0.20;
 
         /*****Instrumentos idiomas****/
@@ -113,8 +118,10 @@ public class Model {
         double afinidadArteLiteratura;
         int contador_arte=0;
         int contador_lectura=0;
-        double regla_arte=0.5;
-        double regla_lectura=0.5;
+//        double regla_arte=0.5;
+        double regla_arte=usuario.getArte_weight()*0.01;
+//        double regla_lectura=0.5;
+        double regla_lectura=usuario.getLectura_weight()*0.01;
         double factor=0.1;
 
         /*****Arte****/
@@ -154,8 +161,10 @@ public class Model {
         double afinidadEjercicio;
         int contador_relajacion=0;
         int contador_fisicos=0;
-        double regla_relajacion=0.5;
-        double regla_fisicos=0.5;
+//        double regla_relajacion=0.5;
+        double regla_relajacion=usuario.getEr_weight()*0.01;
+//        double regla_fisicos=0.5;
+        double regla_fisicos=usuario.getEf_weight()*0.01;
         double factor=0.35;
 
         /*****Ejercicios de Relajación****/

@@ -35,6 +35,7 @@ dependencies {
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:cardview-v7:27.1.1'
     implementation 'com.google.firebase:firebase-database:15.0.1'
+    implementation 'com.ibm.watson.developer_cloud:tone-analyzer:6.1.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

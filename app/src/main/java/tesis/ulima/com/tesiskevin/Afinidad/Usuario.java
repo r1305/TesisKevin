@@ -1,48 +1,133 @@
 package tesis.ulima.com.tesiskevin.Afinidad;
 
 public class Usuario {
-    int chk_guitarra_val,
-        chk_timbales_val,
-        chk_piano_val,
-        chk_violin_val,
-        chk_saxofon_val,
-        chk_trompeta_val,
-        chk_bateria_val,
-        chk_tejido_val,
-        chk_costura_val,
-        chk_manualidades_val,
-        chk_escultura_val,
-        chk_ajedrez_val,
-        chk_ludo_val,
-        chk_damas_val,
-        chk_damas_chinas_val,
-        chk_ingles_val,
-        chk_aleman_val,
-        chk_frances_val,
-        chk_portugues_val,
-        chk_italiano_val,
-        chk_hp_val,
-        chk_hu_val,
-        chk_hc_val,
-        chk_ha_val,
-        chk_cine_val,
-        chk_teatro_val,
-        chk_pintura_val,
-        chk_arquitectura_val,
-        chk_novela_val,
-        chk_drama_val,
-        chk_historia_val,
-        chk_autoayuda_val,
-        chk_thriller_val,
-        chk_taichi_val,
-        chk_yoga_val,
-        chk_meditacion_val,
-        chk_rmp_val,
-        chk_baile_val,
-        chk_estiramientos_val,
-        chk_caminata_val,
-        chk_gimnasia_val,
-        chk_biodanza_val;
+    int chk_guitarra_val;
+    int chk_timbales_val;
+    int chk_piano_val;
+    int chk_violin_val;
+    int chk_saxofon_val;
+    int chk_trompeta_val;
+    int chk_bateria_val;
+    int chk_tejido_val;
+    int chk_costura_val;
+    int chk_manualidades_val;
+    int chk_escultura_val;
+    int chk_ajedrez_val;
+    int chk_ludo_val;
+    int chk_damas_val;
+    int chk_damas_chinas_val;
+    int chk_ingles_val;
+    int chk_aleman_val;
+    int chk_frances_val;
+    int chk_portugues_val;
+    int chk_italiano_val;
+    int chk_hp_val;
+    int chk_hu_val;
+    int chk_hc_val;
+    int chk_ha_val;
+    int chk_cine_val;
+    int chk_teatro_val;
+    int chk_pintura_val;
+    int chk_arquitectura_val;
+    int chk_novela_val;
+    int chk_drama_val;
+    int chk_historia_val;
+    int chk_autoayuda_val;
+    int chk_thriller_val;
+    int chk_taichi_val;
+    int chk_yoga_val;
+    int chk_meditacion_val;
+    int chk_rmp_val;
+    int chk_baile_val;
+    int chk_estiramientos_val;
+    int chk_caminata_val;
+    int chk_gimnasia_val;
+    int chk_biodanza_val;
+
+    int im_weight;
+    int mc_weight;
+    int jm_weight;
+    int idiom_weight;
+    int hist_weight;
+    int arte_weight;
+    int lectura_weight;
+    int er_weight;
+
+    public int getIm_weight() {
+        return im_weight;
+    }
+
+    public void setIm_weight(int im_weight) {
+        this.im_weight = im_weight;
+    }
+
+    public int getMc_weight() {
+        return mc_weight;
+    }
+
+    public void setMc_weight(int mc_weight) {
+        this.mc_weight = mc_weight;
+    }
+
+    public int getJm_weight() {
+        return jm_weight;
+    }
+
+    public void setJm_weight(int jm_weight) {
+        this.jm_weight = jm_weight;
+    }
+
+    public int getIdiom_weight() {
+        return idiom_weight;
+    }
+
+    public void setIdiom_weight(int idiom_weight) {
+        this.idiom_weight = idiom_weight;
+    }
+
+    public int getHist_weight() {
+        return hist_weight;
+    }
+
+    public void setHist_weight(int hist_weight) {
+        this.hist_weight = hist_weight;
+    }
+
+    public int getArte_weight() {
+        return arte_weight;
+    }
+
+    public void setArte_weight(int arte_weight) {
+        this.arte_weight = arte_weight;
+    }
+
+    public int getLectura_weight() {
+        return lectura_weight;
+    }
+
+    public void setLectura_weight(int lectura_weight) {
+        this.lectura_weight = lectura_weight;
+    }
+
+    public int getEr_weight() {
+        return er_weight;
+    }
+
+    public void setEr_weight(int er_weight) {
+        this.er_weight = er_weight;
+    }
+
+    public int getEf_weight() {
+        return ef_weight;
+    }
+
+    public void setEf_weight(int ef_weight) {
+        this.ef_weight = ef_weight;
+    }
+
+    int ef_weight
+
+    ;
 
 
     public Usuario() {
